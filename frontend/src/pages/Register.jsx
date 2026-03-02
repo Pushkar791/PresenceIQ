@@ -77,7 +77,8 @@ const Register = () => {
                 data.append('photos', blob, `frame_${i}.jpg`);
             }
 
-            await axios.post('http://localhost:5000/api/students', data, {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            await axios.post(`${API_URL}/api/students`, data, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${user.token}`

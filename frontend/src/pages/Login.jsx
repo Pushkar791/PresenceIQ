@@ -17,13 +17,15 @@ const Login = () => {
         setIsLoading(true);
         setError('');
         try {
-            const res = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const res = await axios.post(`${API_URL}/api/auth/login`, { email, password });
             login(res.data);
             navigate('/');
         } catch (err) {
             if (err.response?.status === 401 || err.response?.status === 404) {
                 try {
-                    const registerRes = await axios.post('http://localhost:5000/api/auth/register', {
+                    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+                    const registerRes = await axios.post(`${API_URL}/api/auth/register`, {
                         name: 'Admin', email, password, role: 'Admin'
                     });
                     login(registerRes.data);

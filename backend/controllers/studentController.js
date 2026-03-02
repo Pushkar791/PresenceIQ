@@ -26,7 +26,7 @@ const registerStudent = async (req, res) => {
         for (const file of files) {
             try {
                 const response = await axios.post(`${process.env.PYTHON_API_URL}/encode`, {
-                    image_path: path.resolve(file.path)
+                    image_b64: fs.readFileSync(file.path, { encoding: 'base64' })
                 });
                 if (response.data && response.data.encoding) {
                     allEncodings.push(response.data.encoding);

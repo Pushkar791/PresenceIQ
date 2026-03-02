@@ -12,9 +12,10 @@ const Dashboard = () => {
         const fetchData = async () => {
             try {
                 const config = { headers: { Authorization: `Bearer ${user.token}` } };
+                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
                 const [attRes, stdRes] = await Promise.all([
-                    axios.get('http://localhost:5000/api/attendance', config),
-                    axios.get('http://localhost:5000/api/students', config)
+                    axios.get(`${API_URL}/api/attendance`, config),
+                    axios.get(`${API_URL}/api/students`, config)
                 ]);
                 setAttendance(attRes.data);
                 setStudentsCount(stdRes.data.length);

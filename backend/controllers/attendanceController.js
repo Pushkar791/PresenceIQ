@@ -14,7 +14,7 @@ const markAttendance = async (req, res) => {
     try {
         // 1. Get embedding from Python API
         const response = await axios.post(`${process.env.PYTHON_API_URL}/recognize`, {
-            image_path: path.resolve(file.path)
+            image_b64: fs.readFileSync(file.path, { encoding: 'base64' })
         });
 
         fs.unlinkSync(file.path); // clean up

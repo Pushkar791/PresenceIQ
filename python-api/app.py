@@ -16,8 +16,12 @@ hog = cv2.HOGDescriptor(
     _nbins=9
 )
 
-def extract_hog_encoding(image_path):
-    img = cv2.imread(image_path)
+import base64
+
+def extract_hog_encoding(image_b64):
+    image_data = base64.b64decode(image_b64.split(',')[-1])
+    np_arr = np.frombuffer(image_data, np.uint8)
+    img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
     if img is None:
         raise ValueError("Could not read image file.")
         
@@ -57,13 +61,13 @@ def extract_hog_encoding(image_path):
 @app.route('/encode', methods=['POST'])
 def encode_face():
     data = request.json
-    image_path = data.get('image_path')
+    image_b64 = data.get('image_b64')
 
-    if not image_path or not os.path.exists(image_path):
-        return jsonify({'error': 'Image not found'}), 400
+    if not image_b64:
+        return jsonify({'error': 'Image data not found'}), 400
 
     try:
-        embedding = extract_hog_encoding(image_path)
+        embedding = extract_hog_encoding(image_b64)
         return jsonify({'encoding': embedding})
     except ValueError as e:
         return jsonify({'error': str(e)}), 400
@@ -73,13 +77,13 @@ def encode_face():
 @app.route('/recognize', methods=['POST'])
 def recognize_face():
     data = request.json
-    image_path = data.get('image_path')
+    image_b64 = data.get('image_b64')
 
-    if not image_path or not os.path.exists(image_path):
-        return jsonify({'error': 'Image not found'}), 400
+    if not image_b64:
+        return jsonify({'error': 'Image data not found'}), 400
 
     try:
-        embedding = extract_hog_encoding(image_path)
+        embedding = extract_hog_encoding(image_b64)
         return jsonify({'encoding': embedding})
     except ValueError as e:
         return jsonify({'error': str(e)}), 400

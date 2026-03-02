@@ -63,7 +63,8 @@ const Attendance = () => {
         formData.append('photo', blob, 'live_frame.jpg');
 
         try {
-            const res = await axios.post('http://localhost:5000/api/attendance', formData, {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const res = await axios.post(`${API_URL}/api/attendance`, formData, {
                 headers: { Authorization: `Bearer ${user.token}` }
             });
 
