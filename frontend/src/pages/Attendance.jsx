@@ -10,6 +10,7 @@ const Attendance = () => {
     const [stream, setStream] = useState(null);
 
     const [mode, setMode] = useState('manual');
+    const [subject, setSubject] = useState('DSOOPS');
     const [loading, setLoading] = useState(false);
     const [result, setResult] = useState(null);
     const [recentLogs, setRecentLogs] = useState([]);
@@ -61,6 +62,7 @@ const Attendance = () => {
 
         const formData = new FormData();
         formData.append('photo', blob, 'live_frame.jpg');
+        formData.append('subject', subject);
 
         try {
             const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -70,7 +72,7 @@ const Attendance = () => {
 
             const st = res.data.student;
             setResult({ status: 'success', text: `Verified: ${st.name} (${st.roll_no})` });
-            setRecentLogs(prev => [{ name: st.name, roll_no: st.roll_no, time: res.data.record.time }, ...prev].slice(0, 5));
+            setRecentLogs(prev => [{ name: st.name, roll_no: st.roll_no, time: res.data.record.time, subject: res.data.record.subject }, ...prev].slice(0, 5));
         } catch (err) {
             setResult({ status: 'error', text: err.response?.data?.message || 'Face not recognized' });
         } finally {
@@ -95,6 +97,18 @@ const Attendance = () => {
                         style={{ background: mode === 'live' ? 'var(--accent-primary)' : 'transparent', color: mode === 'live' ? 'white' : 'var(--text-secondary)', border: 'none', padding: '10px 24px', borderRadius: '10px', cursor: 'pointer', fontWeight: '500', transition: 'all 0.3s' }}
                     >Continuous Mode</button>
                 </div>
+            </div>
+
+            <div style={{ marginBottom: '20px', display: 'flex', gap: '20px', alignItems: 'center', background: 'var(--glass-bg)', padding: '20px', borderRadius: '16px', border: '1px solid var(--glass-border)' }}>
+                <div style={{ fontWeight: '500' }}>Select Subject:</div>
+                <select value={subject} onChange={(e) => setSubject(e.target.value)} style={{ width: '250px', background: 'white', color: 'var(--text-primary)', border: '1px solid #e4e4e7', borderRadius: '10px', padding: '10px 15px', color: '#18181b', fontWeight: '500' }}>
+                    <option value="DSOOPS">DSOOPS</option>
+                    <option value="BEE (Backend engg)">BEE (Backend engg)</option>
+                    <option value="IOT">IOT</option>
+                    <option value="LINUX">LINUX</option>
+                    <option value="COMPUTER NETWORK (CN)">COMPUTER NETWORK (CN)</option>
+                </select>
+                <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Attendance will be logged under this subject for the current session.</div>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '40px' }}>
@@ -170,7 +184,10 @@ const Attendance = () => {
                                 <div key={idx} style={{ padding: '12px 16px', background: 'rgba(255,255,255,0.03)', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <div>
                                         <p style={{ margin: '0 0 4px 0', fontWeight: '500' }}>{log.name}</p>
-                                        <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>{log.roll_no}</span>
+                                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                            <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>{log.roll_no}</span>
+                                            <span style={{ fontSize: '0.8rem', background: 'rgba(99, 102, 241, 0.1)', color: '#6366f1', padding: '2px 8px', borderRadius: '10px' }}>{log.subject}</span>
+                                        </div>
                                     </div>
                                     <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>{log.time}</span>
                                 </div>

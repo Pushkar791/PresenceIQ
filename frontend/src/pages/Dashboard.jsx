@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import { Users, UserCheck, CalendarDays, TrendingUp } from 'lucide-react';
 
 const Dashboard = () => {
     const { user } = useContext(AuthContext);
+    const navigate = useNavigate();
     const [attendance, setAttendance] = useState([]);
     const [studentsCount, setStudentsCount] = useState(0);
 
@@ -80,6 +82,7 @@ const Dashboard = () => {
                             <tr>
                                 <th>Student</th>
                                 <th>Roll No</th>
+                                <th>Subject</th>
                                 <th>Status</th>
                                 <th>Date</th>
                                 <th>Time In</th>
@@ -88,9 +91,10 @@ const Dashboard = () => {
                         </thead>
                         <tbody>
                             {attendance.slice(0, 15).map((record) => (
-                                <tr key={record._id}>
+                                <tr key={record._id} onClick={() => record.student_id ? navigate(`/student/${record.student_id?._id}`) : null} style={{ cursor: 'pointer', transition: 'background 0.2s' }} onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(0,0,0,0.02)' }} onMouseOut={(e) => { e.currentTarget.style.background = 'transparent' }}>
                                     <td><strong>{record.student_id?.name || 'Unknown'}</strong></td>
                                     <td style={{ color: 'var(--text-secondary)' }}>{record.student_id?.roll_no || 'N/A'}</td>
+                                    <td><span style={{ fontSize: '0.8rem', background: 'rgba(0, 113, 227, 0.1)', color: '#0071e3', padding: '4px 8px', borderRadius: '8px', fontWeight: '500' }}>{record.subject || 'General'}</span></td>
                                     <td>
                                         <span className={`badge ${record.status.toLowerCase()}`}>{record.status}</span>
                                     </td>
@@ -101,7 +105,7 @@ const Dashboard = () => {
                             ))}
                             {attendance.length === 0 && (
                                 <tr>
-                                    <td colSpan="6" style={{ textAlign: 'center', padding: '40px', color: 'var(--text-secondary)' }}>
+                                    <td colSpan="7" style={{ textAlign: 'center', padding: '40px', color: 'var(--text-secondary)' }}>
                                         No attendance records found yet. Try marking attendance!
                                     </td>
                                 </tr>

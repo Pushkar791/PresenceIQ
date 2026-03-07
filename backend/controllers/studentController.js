@@ -1,4 +1,5 @@
 const Student = require('../models/Student');
+const Attendance = require('../models/Attendance');
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
@@ -80,4 +81,19 @@ const getStudents = async (req, res) => {
     }
 };
 
-module.exports = { registerStudent, getStudents };
+// @desc    Get a single student and their attendance history
+// @route   GET /api/students/:id
+// @access  Private
+const getStudentProfile = async (req, res) => {
+    try {
+        const student = await Student.findById(req.params.id).select('-face_encoding');
+        if (!student) return res.status(404).json({ message: 'Student not found' });
+
+        const attendance = await Attendance.find({ student_id: req.params.id }).sort({ date: 1, time: 1 });
+        res.json({ student, attendance });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+module.exports = { registerStudent, getStudents, getStudentProfile };

@@ -58,6 +58,10 @@ def extract_hog_encoding(image_b64):
     
     return vector.tolist()
 
+@app.route('/', methods=['GET'])
+def index():
+    return jsonify({"status": "Python API is running! 🐍"})
+
 @app.route('/encode', methods=['POST'])
 def encode_face():
     data = request.json

@@ -11,6 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
+app.get('/', (req, res) => res.json({ status: "Backend is running! 🚀" }));
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/students', require('./routes/studentRoutes'));
 app.use('/api/attendance', require('./routes/attendanceRoutes'));

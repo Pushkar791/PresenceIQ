@@ -9,6 +9,7 @@ const path = require('path');
 // @access  Private
 const markAttendance = async (req, res) => {
     const file = req.file;
+    const subject = req.body.subject || 'General';
     if (!file) return res.status(400).json({ message: 'Photo is required' });
 
     try {
@@ -59,20 +60,22 @@ const markAttendance = async (req, res) => {
         const dateStr = now.toISOString().split('T')[0];
         const timeStr = now.toTimeString().split(' ')[0];
 
-        // Optional: Prevent duplicate attendance on the same day
+        // Optional: Prevent duplicate attendance on the same day for the same subject
         const existing = await Attendance.findOne({
             student_id: matchedStudent._id,
-            date: dateStr
+            date: dateStr,
+            subject: subject
         });
 
         if (existing) {
-            return res.status(400).json({ message: `Attendance already marked today for ${matchedStudent.name}` });
+            return res.status(400).json({ message: `Attendance already marked today for ${matchedStudent.name} in ${subject}` });
         }
 
         const attendance = await Attendance.create({
             student_id: matchedStudent._id,
             date: dateStr,
             time: timeStr,
+            subject: subject,
             status: 'Present',
             ip_address: req.ip || req.connection.remoteAddress,
             recorded_by: req.user ? req.user._id : null

@@ -7,11 +7,18 @@ const connectDB = async () => {
     const conn = await mongoose.connect(process.env.MONGO_URI);
     console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
+    if (process.env.VERCEL) {
+      console.error(`\n🔥 FATAL ERROR: Could not connect to MongoDB on Vercel!`);
+      console.error(`Please ensure your Vercel Environment Variable 'MONGO_URI' is set to a valid Cloud Database like MongoDB Atlas.`);
+      console.error(`Original Error: ${error.message}\n`);
+      return;
+    }
+
     console.warn(`\n⚠️  WARNING: Could not connect to local MongoDB database at ${process.env.MONGO_URI}. Is MongoDB installed and running?`);
     console.warn(`⚠️  Falling back to temporary In-Memory Database to keep the server running...\n`);
 
     try {
-      // Fallback to Memory Database
+      // Fallback to Memory Database (Local Only)
       const mongoServer = await MongoMemoryServer.create();
       const uri = mongoServer.getUri();
       const memoryConn = await mongoose.connect(uri);

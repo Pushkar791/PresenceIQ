@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Register from './pages/Register';
 import Attendance from './pages/Attendance';
+import StudentProfile from './pages/StudentProfile';
 import { Camera, Users, Activity, LogOut } from 'lucide-react';
 
 const ProtectedRoute = ({ children }) => {
@@ -51,6 +52,7 @@ function App() {
             <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/register" element={<ProtectedRoute><Register /></ProtectedRoute>} />
             <Route path="/attendance" element={<ProtectedRoute><Attendance /></ProtectedRoute>} />
+            <Route path="/student/:id" element={<ProtectedRoute><StudentProfile /></ProtectedRoute>} />
           </Routes>
         </div>
       </Router>

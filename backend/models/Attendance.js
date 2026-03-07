@@ -4,6 +4,7 @@ const attendanceSchema = new mongoose.Schema({
     student_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Student', required: true },
     date: { type: String, required: true }, // Format: YYYY-MM-DD
     time: { type: String, required: true }, // Format: HH:MM:SS
+    subject: { type: String, required: true, default: 'General' },
     status: { type: String, enum: ['Present', 'Late', 'Absent'], default: 'Present' },
     recorded_by: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     ip_address: { type: String },
