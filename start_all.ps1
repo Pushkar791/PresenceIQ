@@ -1,3 +1,8 @@
+Write-Host "Smart Attend local startup"
+Write-Host "Make sure backend/.env and frontend/.env are created from their .env.example files."
+Write-Host "For production, deploy frontend/backend separately and host python-api on a persistent service."
+Write-Host ""
+
 if (!(Test-Path -Path "backend/node_modules")) {
     Write-Host "Installing backend dependencies..."
     Set-Location -Path backend
@@ -13,6 +18,9 @@ if (!(Test-Path -Path "frontend/node_modules")) {
 }
 
 Write-Host "Starting all services..."
+
+# Local MongoDB for development can be started with: docker compose up -d
+# This script assumes MongoDB is already available on the configured connection string.
 
 # Start Backend
 Write-Host "Starting Node.js Backend on port 5000..."

@@ -1,8 +1,10 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Camera, Shield, Users } from 'lucide-react';
+import GoogleAuthButton from '../components/GoogleAuthButton';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -11,31 +13,48 @@ const Login = () => {
     const [isLoading, setIsLoading] = useState(false);
     const { login } = useContext(AuthContext);
     const navigate = useNavigate();
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+    const allowedDomain = (import.meta.env.VITE_ALLOWED_EMAIL_DOMAIN || '').trim().toLowerCase();
+    const isAllowedEmail = (e) => {
+        if (!allowedDomain) return true;
+        const normalized = (e || '').trim().toLowerCase();
+        if (!normalized.includes('@')) return false;
+        return normalized.split('@').pop() === allowedDomain;
+    };
 
     const handleLogin = async (e) => {
         e.preventDefault();
         setIsLoading(true);
         setError('');
+
+        if (!isAllowedEmail(email)) {
+            setIsLoading(false);
+            setError(`Only @${allowedDomain} accounts are allowed`);
+            return;
+        }
+
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
             const res = await axios.post(`${API_URL}/api/auth/login`, { email, password });
             login(res.data);
             navigate('/');
         } catch (err) {
-            if (err.response?.status === 401 || err.response?.status === 404) {
-                try {
-                    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-                    const registerRes = await axios.post(`${API_URL}/api/auth/register`, {
-                        name: 'Admin', email, password, role: 'Admin'
-                    });
-                    login(registerRes.data);
-                    navigate('/');
-                } catch (regErr) {
-                    setError(err.response?.data?.message || 'Login failed');
-                }
-            } else {
-                setError(err.response?.data?.message || 'Login failed');
-            }
+            setError(err.response?.data?.message || 'Login failed');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleGoogleLogin = async (credential) => {
+        setError('');
+        setIsLoading(true);
+
+        try {
+            const res = await axios.post(`${API_URL}/api/auth/google`, { credential, role: 'Teacher' });
+            login(res.data);
+            navigate('/');
+        } catch (err) {
+            setError(err.response?.data?.message || 'Google sign-in failed');
         } finally {
             setIsLoading(false);
         }
@@ -65,6 +84,19 @@ const Login = () => {
 
                     {error && <div style={{ color: '#ef4444', background: 'rgba(239, 68, 68, 0.1)', padding: '12px', borderRadius: '8px', marginBottom: '20px' }}>{error}</div>}
 
+                    <GoogleAuthButton
+                        onCredential={handleGoogleLogin}
+                        onError={setError}
+                        text="signin_with"
+                        enableOneTap
+                    />
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', margin: '22px 0', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+                        <div style={{ flex: 1, height: '1px', background: 'rgba(0, 0, 0, 0.08)' }} />
+                        <span>or use your password</span>
+                        <div style={{ flex: 1, height: '1px', background: 'rgba(0, 0, 0, 0.08)' }} />
+                    </div>
+
                     <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                         <div>
                             <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)' }}>Email</label>
@@ -78,6 +110,15 @@ const Login = () => {
                             {isLoading ? <div className="loader" style={{ margin: '0 auto' }}></div> : 'Sign In'}
                         </button>
                     </form>
+
+                    <div style={{ marginTop: '18px', color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
+                        Don’t have an account? <Link to="/signup" style={{ color: 'var(--accent-primary)', fontWeight: 600 }}>Create one</Link>
+                    </div>
+                    {allowedDomain && (
+                        <div style={{ marginTop: '14px', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+                            Google and password sign-in are limited to <strong>@{allowedDomain}</strong> accounts.
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
