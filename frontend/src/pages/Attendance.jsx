@@ -74,7 +74,7 @@ const Attendance = () => {
             setResult({ status: 'success', text: `Verified: ${st.name} (${st.roll_no})` });
             setRecentLogs(prev => [{ name: st.name, roll_no: st.roll_no, time: res.data.record.time, subject: res.data.record.subject }, ...prev].slice(0, 5));
         } catch (err) {
-            setResult({ status: 'error', text: err.response?.data?.message || 'Face not recognized' });
+            setResult({ status: 'error', text: err.response?.data?.message || err.response?.data?.error || 'Face not recognized' });
         } finally {
             setLoading(false);
         }

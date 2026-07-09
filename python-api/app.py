@@ -60,7 +60,11 @@ def extract_hog_encoding(image_b64):
 
 @app.route('/', methods=['GET'])
 def index():
-    return jsonify({"status": "Python API is running! 🐍"})
+    return jsonify({"status": "Python API is running"})
+
+@app.route('/health', methods=['GET'])
+def health():
+    return jsonify({"status": "ok"})
 
 @app.route('/encode', methods=['POST'])
 def encode_face():
@@ -95,4 +99,5 @@ def recognize_face():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(port=8000, debug=True)
+    port = int(os.environ.get('PORT', 8000))
+    app.run(host='0.0.0.0', port=port, debug=False)

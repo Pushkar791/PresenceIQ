@@ -34,7 +34,8 @@ app.use('/api/attendance', require('./routes/attendanceRoutes'));
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ message: 'Internal Server Error', error: err.message });
+  const status = err.message === 'Images Only!' ? 400 : 500;
+  res.status(status).json({ message: err.message || 'Internal Server Error' });
 });
 
 const PORT = process.env.PORT || 5000;

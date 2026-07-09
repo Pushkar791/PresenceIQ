@@ -89,7 +89,7 @@ const Register = () => {
             setFormData({ name: '', roll_no: '' });
             setFrames([]);
         } catch (err) {
-            setMessage({ text: err.response?.data?.message || 'Registration failed', type: 'error' });
+            setMessage({ text: err.response?.data?.message || err.response?.data?.error || 'Registration failed', type: 'error' });
         } finally {
             setLoading(false);
         }

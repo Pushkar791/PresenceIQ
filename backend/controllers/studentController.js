@@ -1,8 +1,18 @@
 const Student = require('../models/Student');
 const Attendance = require('../models/Attendance');
 const axios = require('axios');
-const fs = require('fs');
-const path = require('path');
+const { getImageBase64, cleanupUploads, getPythonApiUrl } = require('../utils/uploadFile');
+
+const encodeFace = async (file, pythonApiUrl) => {
+    const response = await axios.post(`${pythonApiUrl}/encode`, {
+        image_b64: getImageBase64(file),
+    }, { timeout: 30000 });
+
+    if (response.data?.encoding) {
+        return response.data.encoding;
+    }
+    return null;
+};
 
 // @desc    Register a student
 // @route   POST /api/students
@@ -10,62 +20,66 @@ const path = require('path');
 const registerStudent = async (req, res) => {
     const { name, roll_no } = req.body;
     const files = req.files;
+    const pythonApiUrl = getPythonApiUrl();
 
     if (!files || files.length === 0) {
         return res.status(400).json({ message: 'At least one photo is required' });
     }
 
+    if (!pythonApiUrl) {
+        cleanupUploads(files);
+        return res.status(503).json({
+            message: 'Face recognition service is not configured. Set PYTHON_API_URL on the backend.',
+        });
+    }
+
     try {
         const studentExists = await Student.findOne({ roll_no });
         if (studentExists) {
-            // cleanup uploaded files
-            files.forEach(f => fs.unlinkSync(f.path));
+            cleanupUploads(files);
             return res.status(400).json({ message: 'Student with this roll number already exists' });
         }
 
-        let allEncodings = [];
+        const allEncodings = [];
         for (const file of files) {
             try {
-                const response = await axios.post(`${process.env.PYTHON_API_URL}/encode`, {
-                    image_b64: fs.readFileSync(file.path, { encoding: 'base64' })
-                });
-                if (response.data && response.data.encoding) {
-                    allEncodings.push(response.data.encoding);
-                }
+                const encoding = await encodeFace(file, pythonApiUrl);
+                if (encoding) allEncodings.push(encoding);
             } catch (err) {
-                console.error(`Encoding failed for ${file.originalname}:`, err.message);
+                console.error(`Encoding failed for ${file.originalname}:`, err.response?.data?.error || err.message);
             }
         }
 
-        // cleanup files
-        files.forEach(f => fs.unlinkSync(f.path));
+        cleanupUploads(files);
 
         if (allEncodings.length === 0) {
             return res.status(400).json({ message: 'Failed to detect any faces in the provided images.' });
         }
 
-        // Average the encodings
         const numEncodings = allEncodings.length;
         const configLength = allEncodings[0].length;
-        let avgEncoding = new Array(configLength).fill(0);
+        const avgEncoding = new Array(configLength).fill(0);
 
         for (let i = 0; i < numEncodings; i++) {
             for (let j = 0; j < configLength; j++) {
                 avgEncoding[j] += allEncodings[i][j];
             }
         }
-        avgEncoding = avgEncoding.map(val => val / numEncodings);
 
         const student = await Student.create({
             name,
             roll_no,
-            face_encoding: avgEncoding,
-            registered_by: req.user ? req.user._id : null
+            face_encoding: avgEncoding.map((val) => val / numEncodings),
+            registered_by: req.user ? req.user._id : null,
         });
 
         res.status(201).json(student);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        cleanupUploads(files);
+        if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND') {
+            return res.status(503).json({ message: 'Face recognition service is unavailable. Check PYTHON_API_URL.' });
+        }
+        res.status(500).json({ message: error.response?.data?.error || error.message });
     }
 };
 
