@@ -14,9 +14,6 @@ const encodeFace = async (file, pythonApiUrl) => {
     return null;
 };
 
-// @desc    Register a student
-// @route   POST /api/students
-// @access  Private
 const registerStudent = async (req, res) => {
     const { name, roll_no } = req.body;
     const files = req.files;
@@ -28,9 +25,7 @@ const registerStudent = async (req, res) => {
 
     if (!pythonApiUrl) {
         cleanupUploads(files);
-        return res.status(503).json({
-            message: 'Face recognition service is not configured. Set PYTHON_API_URL on the backend.',
-        });
+        return res.status(503).json({ message: 'Face recognition service is not configured.' });
     }
 
     try {
@@ -77,15 +72,12 @@ const registerStudent = async (req, res) => {
     } catch (error) {
         cleanupUploads(files);
         if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND') {
-            return res.status(503).json({ message: 'Face recognition service is unavailable. Check PYTHON_API_URL.' });
+            return res.status(503).json({ message: 'Face recognition service is unavailable.' });
         }
         res.status(500).json({ message: error.response?.data?.error || error.message });
     }
 };
 
-// @desc    Get all students
-// @route   GET /api/students
-// @access  Private
 const getStudents = async (req, res) => {
     try {
         const students = await Student.find({}).select('-face_encoding');
@@ -95,9 +87,6 @@ const getStudents = async (req, res) => {
     }
 };
 
-// @desc    Get a single student and their attendance history
-// @route   GET /api/students/:id
-// @access  Private
 const getStudentProfile = async (req, res) => {
     try {
         const student = await Student.findById(req.params.id).select('-face_encoding');

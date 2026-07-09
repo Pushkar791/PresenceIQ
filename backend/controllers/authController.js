@@ -18,7 +18,7 @@ const getAllowedGoogleClientIds = () => (
 
 const isAllowedDomainEmail = (email) => {
     const allowed = (process.env.ALLOWED_EMAIL_DOMAIN || '').trim().toLowerCase();
-    if (!allowed) return true; // if not configured, don't block
+    if (!allowed) return true;
     const e = normalizeEmail(email);
     if (!e.includes('@')) return false;
     const domain = e.split('@').pop();
@@ -33,9 +33,6 @@ const buildAuthResponse = (user) => ({
     token: generateToken(user._id),
 });
 
-// @desc    Auth user & get token
-// @route   POST /api/auth/login
-// @access  Public
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -56,9 +53,6 @@ const loginUser = async (req, res) => {
     }
 };
 
-// @desc    Register a new user (Admin or Teacher)
-// @route   POST /api/auth/register
-// @access  Private/Admin
 const registerUser = async (req, res) => {
     const { name, email, password, role } = req.body;
     try {
@@ -68,7 +62,6 @@ const registerUser = async (req, res) => {
         const userExists = await User.findOne({ email });
         if (userExists) return res.status(400).json({ message: 'User already exists' });
 
-        // Public signup should not be able to create Admin accounts.
         const safeRole = role === 'Admin' ? 'Teacher' : (role || 'Teacher');
         const user = await User.create({
             name,
@@ -87,9 +80,6 @@ const registerUser = async (req, res) => {
     }
 };
 
-// @desc    Authenticate or register user with Google
-// @route   POST /api/auth/google
-// @access  Public
 const googleAuthUser = async (req, res) => {
     const { credential, role } = req.body;
 
@@ -144,7 +134,7 @@ const googleAuthUser = async (req, res) => {
 
         return res.json(buildAuthResponse(user));
     } catch (error) {
-        return res.status(401).json({ message: 'Google sign-in failed', error: error.message });
+        return res.status(401).json({ message: 'Google sign-in failed' });
     }
 };
 

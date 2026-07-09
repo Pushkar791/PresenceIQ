@@ -3,26 +3,21 @@ const { MongoMemoryServer } = require('mongodb-memory-server');
 
 const connectDB = async () => {
   try {
-    // Attempt to connect to the real persistent database first
     const conn = await mongoose.connect(process.env.MONGO_URI);
     console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
     if (process.env.VERCEL) {
-      console.error(`\n🔥 FATAL ERROR: Could not connect to MongoDB on Vercel!`);
-      console.error(`Please ensure your Vercel Environment Variable 'MONGO_URI' is set to a valid Cloud Database like MongoDB Atlas.`);
-      console.error(`Original Error: ${error.message}\n`);
+      console.error(`MongoDB connection failed: ${error.message}`);
       return;
     }
 
-    console.warn(`\n⚠️  WARNING: Could not connect to local MongoDB database at ${process.env.MONGO_URI}. Is MongoDB installed and running?`);
-    console.warn(`⚠️  Falling back to temporary In-Memory Database to keep the server running...\n`);
+    console.warn(`MongoDB unavailable at ${process.env.MONGO_URI}, using in-memory database.`);
 
     try {
-      // Fallback to Memory Database (Local Only)
       const mongoServer = await MongoMemoryServer.create();
       const uri = mongoServer.getUri();
       const memoryConn = await mongoose.connect(uri);
-      console.log(`MongoDB Connected (Temporary Memory DB): ${memoryConn.connection.host}`);
+      console.log(`MongoDB Connected (Memory): ${memoryConn.connection.host}`);
     } catch (memError) {
       console.error(`Memory DB Error: ${memError.message}`);
       process.exit(1);

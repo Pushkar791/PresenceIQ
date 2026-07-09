@@ -3,9 +3,6 @@ const Student = require('../models/Student');
 const axios = require('axios');
 const { getImageBase64, cleanupUpload, getPythonApiUrl } = require('../utils/uploadFile');
 
-// @desc    Mark attendance
-// @route   POST /api/attendance
-// @access  Private
 const markAttendance = async (req, res) => {
     const file = req.file;
     const subject = req.body.subject || 'General';
@@ -15,9 +12,7 @@ const markAttendance = async (req, res) => {
 
     if (!pythonApiUrl) {
         cleanupUpload(file);
-        return res.status(503).json({
-            message: 'Face recognition service is not configured. Set PYTHON_API_URL on the backend.',
-        });
+        return res.status(503).json({ message: 'Face recognition service is not configured.' });
     }
 
     try {
@@ -93,16 +88,13 @@ const markAttendance = async (req, res) => {
         console.error('Attendance error:', error);
 
         if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND') {
-            return res.status(503).json({ message: 'Face recognition service is unavailable. Check PYTHON_API_URL.' });
+            return res.status(503).json({ message: 'Face recognition service is unavailable.' });
         }
 
         res.status(500).json({ message: error.response?.data?.error || error.message });
     }
 };
 
-// @desc    Get all attendance records
-// @route   GET /api/attendance
-// @access  Private
 const getAttendance = async (req, res) => {
     try {
         const records = await Attendance.find({}).populate('student_id', 'name roll_no status').sort({ createdAt: -1 });

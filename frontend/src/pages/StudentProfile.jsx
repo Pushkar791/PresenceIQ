@@ -35,8 +35,6 @@ const StudentProfile = () => {
     if (loading) return <div style={{ textAlign: 'center', padding: '50px' }}>Loading Profile...</div>;
     if (!student) return <div style={{ textAlign: 'center', padding: '50px' }}>Student not found.</div>;
 
-    // Process data for charts
-    // Let's count attendance classes (Present) per subject to show performance
     const subjectCounts = attendance.reduce((acc, curr) => {
         if (!acc[curr.subject || 'General']) {
             acc[curr.subject || 'General'] = 0;

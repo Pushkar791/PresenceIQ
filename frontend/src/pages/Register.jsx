@@ -55,7 +55,7 @@ const Register = () => {
                 setIsCapturing(false);
                 stopCamera();
             }
-        }, 700); // capture every 700ms, 3 frames
+        }, 700);
     };
 
     const handleSubmit = async (e) => {
@@ -70,7 +70,6 @@ const Register = () => {
             data.append('name', formData.name);
             data.append('roll_no', formData.roll_no);
 
-            // Convert dataUrls to Blobs
             for (let i = 0; i < frames.length; i++) {
                 const res = await fetch(frames[i]);
                 const blob = await res.blob();

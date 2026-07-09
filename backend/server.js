@@ -3,7 +3,6 @@ const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
 
-// Connect to Database
 connectDB();
 
 const app = express();
@@ -24,14 +23,12 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Routes
 app.get('/', (req, res) => res.json({ status: 'Backend is running!' }));
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/students', require('./routes/studentRoutes'));
 app.use('/api/attendance', require('./routes/attendanceRoutes'));
 
-// Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
   const status = err.message === 'Images Only!' ? 400 : 500;
