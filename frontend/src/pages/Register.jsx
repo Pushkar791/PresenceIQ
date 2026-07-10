@@ -101,7 +101,7 @@ const Register = () => {
                 <p style={{ color: 'var(--text-secondary)' }}>Capture multiple dynamic angles for robust model accuracy.</p>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '40px' }}>
+            <div className="grid-register">
                 <div className="glass-panel" style={{ padding: '40px', height: 'fit-content' }}>
                     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                         <div>
@@ -158,9 +158,9 @@ const Register = () => {
                         />
 
                         {frames.length > 0 && !stream && (
-                            <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', padding: '16px', gap: '16px', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(8px)' }}>
+                            <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', padding: '12px', gap: '12px', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(8px)' }}>
                                 {frames.map((frame, idx) => (
-                                    <img key={idx} src={frame} alt="Captured" style={{ width: '120px', height: '120px', objectFit: 'cover', borderRadius: '16px', border: '2px solid var(--accent-primary)', transform: 'scaleX(-1)' }} />
+                                    <img key={idx} src={frame} alt="Captured" style={{ width: 'min(120px, 22vw)', height: 'min(120px, 22vw)', objectFit: 'cover', borderRadius: '16px', border: '2px solid var(--accent-primary)', transform: 'scaleX(-1)' }} />
                                 ))}
                             </div>
                         )}

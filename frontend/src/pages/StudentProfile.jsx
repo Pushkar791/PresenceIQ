@@ -56,8 +56,8 @@ const StudentProfile = () => {
                 <ArrowLeft size={20} /> Back to Dashboard
             </button>
 
-            <div className="glass-panel" style={{ padding: '40px', display: 'flex', alignItems: 'center', gap: '30px', marginBottom: '40px' }}>
-                <div style={{ width: '100px', height: '100px', borderRadius: '50%', background: '#e4e4e7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div className="glass-panel profile-header">
+                <div style={{ width: '100px', height: '100px', borderRadius: '50%', background: '#e4e4e7', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <User size={48} color="var(--text-secondary)" />
                 </div>
                 <div>
@@ -66,7 +66,7 @@ const StudentProfile = () => {
                 </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '30px' }}>
+            <div className="grid-profile">
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
                     <div className="glass-panel" style={{ padding: '30px' }}>
                         <h3 style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>

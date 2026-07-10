@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
 import { AuthContext, AuthProvider } from './context/AuthContext';
 
@@ -8,7 +8,7 @@ import Dashboard from './pages/Dashboard';
 import Register from './pages/Register';
 import Attendance from './pages/Attendance';
 import StudentProfile from './pages/StudentProfile';
-import { Camera, Users, Activity, LogOut } from 'lucide-react';
+import { Camera, Users, Activity, LogOut, Menu, X } from 'lucide-react';
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useContext(AuthContext);
@@ -17,27 +17,50 @@ const ProtectedRoute = ({ children }) => {
 
 const Navigation = () => {
   const { user, logout } = useContext(AuthContext);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   if (!user) return null;
 
-  return (
-    <nav className="nav-bar glass-panel" style={{ margin: '20px', padding: '15px 30px', borderRadius: '15px', borderBottom: 'none' }}>
-      <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <Camera size={28} color="#6366f1" /> PresenceIQ
-      </h2>
-      <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Activity size={18} /> Dashboard</Link>
-        <Link to="/register" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Users size={18} /> Register</Link>
-        <Link to="/attendance" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Camera size={18} /> Live Mode</Link>
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
-        <button onClick={logout} style={{ background: 'transparent', border: '1px solid #ef4444', color: '#ef4444', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', transition: 'all 0.3s' }}
-          onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)' }}
-          onMouseOut={(e) => { e.currentTarget.style.background = 'transparent' }}
-        >
-          <LogOut size={16} /> Logout
+  return (
+    <div className="nav-container">
+      <nav className="nav-bar glass-panel" style={{ margin: '20px', padding: '15px 30px', borderRadius: '15px', borderBottom: 'none' }}>
+        <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Camera size={28} color="#6366f1" /> PresenceIQ
+        </h2>
+        <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Activity size={18} /> Dashboard</Link>
+          <Link to="/register" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Users size={18} /> Register</Link>
+          <Link to="/attendance" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Camera size={18} /> Live Mode</Link>
+
+          <button onClick={logout} style={{ background: 'transparent', border: '1px solid #ef4444', color: '#ef4444', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', transition: 'all 0.3s' }}
+            onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)' }}
+            onMouseOut={(e) => { e.currentTarget.style.background = 'transparent' }}
+          >
+            <LogOut size={16} /> Logout
+          </button>
+        </div>
+        <button className="hamburger-btn" onClick={toggleMobileMenu} aria-label="Toggle menu">
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
-      </div>
-    </nav>
+      </nav>
+
+      {isMobileMenuOpen && (
+        <div className="mobile-menu glass-panel">
+          <Link to="/" onClick={closeMobileMenu}><Activity size={18} /> Dashboard</Link>
+          <Link to="/register" onClick={closeMobileMenu}><Users size={18} /> Register</Link>
+          <Link to="/attendance" onClick={closeMobileMenu}><Camera size={18} /> Live Mode</Link>
+          <button onClick={() => { logout(); closeMobileMenu(); }} style={{ background: 'transparent', border: '1px solid #ef4444', color: '#ef4444', padding: '10px 16px', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', transition: 'all 0.3s' }}
+            onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)' }}
+            onMouseOut={(e) => { e.currentTarget.style.background = 'transparent' }}
+          >
+            <LogOut size={16} /> Logout
+          </button>
+        </div>
+      )}
+    </div>
   );
 };
 

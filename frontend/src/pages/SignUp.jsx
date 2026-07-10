@@ -74,9 +74,9 @@ const SignUp = () => {
     };
 
     return (
-        <div style={{ display: 'flex', minHeight: '80vh', alignItems: 'center', justifyContent: 'center' }}>
-            <div className="glass-panel" style={{ display: 'flex', overflow: 'hidden', maxWidth: '950px', width: '100%', borderRadius: '24px' }}>
-                <div style={{ flex: 1, padding: '40px', background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.10), rgba(99, 102, 241, 0.10))', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <div className="auth-container">
+            <div className="glass-panel auth-card signup-card">
+                <div className="auth-info-panel signup-info">
                     <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '60px', height: '60px', borderRadius: '16px', background: 'var(--accent-primary)', marginBottom: '24px' }}>
                         <Camera size={32} color="white" />
                     </div>
@@ -92,7 +92,7 @@ const SignUp = () => {
                     )}
                 </div>
 
-                <div style={{ flex: 1, padding: '60px', borderLeft: '1px solid rgba(255,255,255,0.05)' }}>
+                <div className="auth-form-panel">
                     <h2 style={{ fontSize: '2rem', marginBottom: '8px' }}>Sign Up</h2>
                     <p style={{ color: 'var(--text-secondary)', marginBottom: '32px' }}>Create a teacher account to continue</p>
 

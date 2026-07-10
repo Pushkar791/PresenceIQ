@@ -61,10 +61,10 @@ const Login = () => {
     };
 
     return (
-        <div style={{ display: 'flex', minHeight: '80vh', alignItems: 'center', justifyContent: 'center' }}>
-            <div className="glass-panel" style={{ display: 'flex', overflow: 'hidden', maxWidth: '900px', width: '100%', borderRadius: '24px' }}>
+        <div className="auth-container">
+            <div className="glass-panel auth-card">
 
-                <div style={{ flex: 1, padding: '40px', background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1))', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                <div className="auth-info-panel">
                     <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '60px', height: '60px', borderRadius: '16px', background: 'var(--accent-primary)', marginBottom: '24px' }}>
                         <Camera size={32} color="white" />
                     </div>
@@ -78,7 +78,7 @@ const Login = () => {
                     </div>
                 </div>
 
-                <div style={{ flex: 1, padding: '60px', borderLeft: '1px solid rgba(255,255,255,0.05)' }}>
+                <div className="auth-form-panel">
                     <h2 style={{ fontSize: '2rem', marginBottom: '8px' }}>Welcome Back</h2>
                     <p style={{ color: 'var(--text-secondary)', marginBottom: '32px' }}>Sign in to continue to dashboard</p>
 

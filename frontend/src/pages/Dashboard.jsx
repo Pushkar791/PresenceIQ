@@ -38,9 +38,9 @@ const Dashboard = () => {
                 <p style={{ color: 'var(--text-secondary)' }}>Here's what is happening today.</p>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px', marginBottom: '40px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '24px', marginBottom: '40px' }}>
                 <div className="glass-panel" style={{ padding: '24px', display: 'flex', alignItems: 'center', gap: '20px' }}>
-                    <div style={{ pading: '16px', background: 'rgba(99, 102, 241, 0.1)', borderRadius: '16px', width: '60px', height: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ padding: '16px', background: 'rgba(99, 102, 241, 0.1)', borderRadius: '16px', width: '60px', height: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <Users size={32} color="#6366f1" />
                     </div>
                     <div>
@@ -50,7 +50,7 @@ const Dashboard = () => {
                 </div>
 
                 <div className="glass-panel" style={{ padding: '24px', display: 'flex', alignItems: 'center', gap: '20px' }}>
-                    <div style={{ pading: '16px', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '16px', width: '60px', height: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ padding: '16px', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '16px', width: '60px', height: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <UserCheck size={32} color="#10b981" />
                     </div>
                     <div>
@@ -60,7 +60,7 @@ const Dashboard = () => {
                 </div>
 
                 <div className="glass-panel" style={{ padding: '24px', display: 'flex', alignItems: 'center', gap: '20px' }}>
-                    <div style={{ pading: '16px', background: 'rgba(236, 72, 153, 0.1)', borderRadius: '16px', width: '60px', height: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ padding: '16px', background: 'rgba(236, 72, 153, 0.1)', borderRadius: '16px', width: '60px', height: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <TrendingUp size={32} color="#ec4899" />
                     </div>
                     <div>
@@ -71,7 +71,7 @@ const Dashboard = () => {
             </div>
 
             <div className="glass-panel" style={{ padding: '30px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <div className="flex-row-between" style={{ marginBottom: '20px' }}>
                     <h3 style={{ display: 'flex', alignItems: 'center', gap: '10px' }}><CalendarDays size={20} /> Recent Attendance</h3>
                     <button className="btn-primary" style={{ padding: '8px 16px', width: 'auto' }}>Export CSV</button>
                 </div>

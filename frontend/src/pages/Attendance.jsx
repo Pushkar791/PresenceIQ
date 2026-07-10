@@ -82,12 +82,12 @@ const Attendance = () => {
 
     return (
         <div style={{ maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
-            <div style={{ marginBottom: '40px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div className="flex-row-between" style={{ marginBottom: '40px' }}>
                 <div>
                     <h2>Live Attendance Check</h2>
                     <p style={{ color: 'var(--text-secondary)' }}>Identify faces in real-time using PresenceIQ.</p>
                 </div>
-                <div style={{ background: 'var(--glass-bg)', padding: '6px', borderRadius: '14px', border: '1px solid var(--glass-border)', display: 'flex' }}>
+                <div style={{ background: 'var(--glass-bg)', padding: '6px', borderRadius: '14px', border: '1px solid var(--glass-border)', display: 'flex', marginTop: '10px' }}>
                     <button
                         onClick={() => setMode('manual')}
                         style={{ background: mode === 'manual' ? 'var(--accent-primary)' : 'transparent', color: mode === 'manual' ? 'white' : 'var(--text-secondary)', border: 'none', padding: '10px 24px', borderRadius: '10px', cursor: 'pointer', fontWeight: '500', transition: 'all 0.3s' }}
@@ -99,9 +99,9 @@ const Attendance = () => {
                 </div>
             </div>
 
-            <div style={{ marginBottom: '20px', display: 'flex', gap: '20px', alignItems: 'center', background: 'var(--glass-bg)', padding: '20px', borderRadius: '16px', border: '1px solid var(--glass-border)' }}>
+            <div style={{ marginBottom: '20px', display: 'flex', flexWrap: 'wrap', gap: '20px', alignItems: 'center', background: 'var(--glass-bg)', padding: '20px', borderRadius: '16px', border: '1px solid var(--glass-border)' }}>
                 <div style={{ fontWeight: '500' }}>Select Subject:</div>
-                <select value={subject} onChange={(e) => setSubject(e.target.value)} style={{ width: '250px', background: 'white', color: 'var(--text-primary)', border: '1px solid #e4e4e7', borderRadius: '10px', padding: '10px 15px', color: '#18181b', fontWeight: '500' }}>
+                <select value={subject} onChange={(e) => setSubject(e.target.value)} style={{ width: '100%', maxWidth: '250px', background: 'white', border: '1px solid #e4e4e7', borderRadius: '10px', padding: '10px 15px', color: '#18181b', fontWeight: '500' }}>
                     <option value="DSOOPS">DSOOPS</option>
                     <option value="BEE (Backend engg)">BEE (Backend engg)</option>
                     <option value="IOT">IOT</option>
@@ -111,7 +111,7 @@ const Attendance = () => {
                 <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Attendance will be logged under this subject for the current session.</div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '40px' }}>
+            <div className="grid-two-cols">
                 <div className="glass-panel" style={{ padding: '0', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
                     <div style={{ padding: '24px', borderBottom: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <h3 style={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '10px' }}><Camera size={20} /> Viewfinder</h3>
@@ -132,16 +132,16 @@ const Attendance = () => {
                         />
 
                         {stream && (
-                            <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '300px', height: '300px', border: '2px solid rgba(255,255,255,0.2)', borderRadius: '40px', zIndex: 10, transition: 'all 0.3s', boxShadow: mode === 'live' ? '0 0 30px rgba(16, 185, 129, 0.4)' : 'none' }}>
-                                <div style={{ position: 'absolute', top: '-2px', left: '-2px', width: '40px', height: '40px', borderTop: `4px solid ${mode === 'live' ? '#10b981' : 'var(--accent-primary)'}`, borderLeft: `4px solid ${mode === 'live' ? '#10b981' : 'var(--accent-primary)'}`, borderTopLeftRadius: '40px', transition: 'all 0.3s' }}></div>
-                                <div style={{ position: 'absolute', top: '-2px', right: '-2px', width: '40px', height: '40px', borderTop: `4px solid ${mode === 'live' ? '#10b981' : 'var(--accent-primary)'}`, borderRight: `4px solid ${mode === 'live' ? '#10b981' : 'var(--accent-primary)'}`, borderTopRightRadius: '40px', transition: 'all 0.3s' }}></div>
-                                <div style={{ position: 'absolute', bottom: '-2px', left: '-2px', width: '40px', height: '40px', borderBottom: `4px solid ${mode === 'live' ? '#10b981' : 'var(--accent-primary)'}`, borderLeft: `4px solid ${mode === 'live' ? '#10b981' : 'var(--accent-primary)'}`, borderBottomLeftRadius: '40px', transition: 'all 0.3s' }}></div>
-                                <div style={{ position: 'absolute', bottom: '-2px', right: '-2px', width: '40px', height: '40px', borderBottom: `4px solid ${mode === 'live' ? '#10b981' : 'var(--accent-primary)'}`, borderRight: `4px solid ${mode === 'live' ? '#10b981' : 'var(--accent-primary)'}`, borderBottomRightRadius: '40px', transition: 'all 0.3s' }}></div>
+                            <div className="viewfinder-box" style={{ boxShadow: mode === 'live' ? '0 0 30px rgba(16, 185, 129, 0.4)' : 'none' }}>
+                                <div style={{ position: 'absolute', top: '-2px', left: '-2px', width: '40px', height: '40px', borderTop: `4px solid ${mode === 'live' ? '#10b981' : 'var(--accent-primary)'}`, borderLeft: `4px solid ${mode === 'live' ? '#10b981' : 'var(--accent-primary)'}`, borderTopLeftRadius: 'inherit', transition: 'all 0.3s' }}></div>
+                                <div style={{ position: 'absolute', top: '-2px', right: '-2px', width: '40px', height: '40px', borderTop: `4px solid ${mode === 'live' ? '#10b981' : 'var(--accent-primary)'}`, borderRight: `4px solid ${mode === 'live' ? '#10b981' : 'var(--accent-primary)'}`, borderTopRightRadius: 'inherit', transition: 'all 0.3s' }}></div>
+                                <div style={{ position: 'absolute', bottom: '-2px', left: '-2px', width: '40px', height: '40px', borderBottom: `4px solid ${mode === 'live' ? '#10b981' : 'var(--accent-primary)'}`, borderLeft: `4px solid ${mode === 'live' ? '#10b981' : 'var(--accent-primary)'}`, borderBottomLeftRadius: 'inherit', transition: 'all 0.3s' }}></div>
+                                <div style={{ position: 'absolute', bottom: '-2px', right: '-2px', width: '40px', height: '40px', borderBottom: `4px solid ${mode === 'live' ? '#10b981' : 'var(--accent-primary)'}`, borderRight: `4px solid ${mode === 'live' ? '#10b981' : 'var(--accent-primary)'}`, borderBottomRightRadius: 'inherit', transition: 'all 0.3s' }}></div>
                             </div>
                         )}
                     </div>
 
-                    <div style={{ pading: '24px', display: 'flex', justifyContent: 'center', background: 'rgba(0,0,0,0.5)', padding: '24px' }}>
+                    <div style={{ padding: '24px', display: 'flex', justifyContent: 'center', background: 'rgba(0,0,0,0.5)' }}>
                         {mode === 'manual' ? (
                             <button
                                 className="btn-primary"

@@ -167,3 +167,241 @@ h3 {
     transform: rotate(360deg);
   }
 }
+
+/* ==========================================================================
+   Responsive Design Utilities and Breakpoints
+   ========================================================================== */
+
+/* Responsive Grid / Flex Layouts */
+.grid-two-cols {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+}
+
+.grid-register {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 40px;
+}
+
+.grid-profile {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 30px;
+}
+
+.flex-row-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Authentication Card Layouts */
+.auth-container {
+  display: flex;
+  min-height: 80vh;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.auth-card {
+  display: flex;
+  overflow: hidden;
+  max-width: 900px;
+  width: 100%;
+  border-radius: 24px;
+}
+
+.auth-info-panel {
+  flex: 1;
+  padding: 40px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.auth-form-panel {
+  flex: 1;
+  padding: 60px;
+  border-left: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* For SignUp specific max-width */
+.auth-card.signup-card {
+  max-width: 950px;
+}
+
+.auth-info-panel.signup-info {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(99, 102, 241, 0.1));
+}
+
+/* Responsive Viewfinder overlay */
+.viewfinder-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 300px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 40px;
+  z-index: 10;
+  transition: all 0.3s;
+}
+
+/* Navigation Mobile Button */
+.hamburger-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-primary);
+  padding: 8px;
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+
+.hamburger-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.mobile-menu {
+  display: none;
+}
+
+/* Profile header */
+.profile-header {
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  /* Navigation Layout */
+  .nav-bar {
+    padding: 15px 20px !important;
+    margin: 15px 15px 25px 15px !important;
+    border-bottom: none !important;
+  }
+  
+  .nav-links {
+    display: none !important; /* Hide desktop links on mobile */
+  }
+  
+  .hamburger-btn {
+    display: block; /* Show hamburger button */
+  }
+  
+  .mobile-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
+    background: var(--glass-bg);
+    border-top: 1px solid var(--glass-border);
+    width: 100%;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+  }
+  
+  .mobile-menu a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 12px 6px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.05rem;
+    transition: color 0.2s;
+  }
+
+  .mobile-menu a:hover,
+  .mobile-menu a.active {
+    color: var(--text-primary);
+  }
+  
+  .mobile-menu button {
+    margin-top: 8px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Auth Screens (Login / SignUp) */
+  .auth-card {
+    flex-direction: column;
+  }
+  
+  .auth-form-panel {
+    padding: 30px 20px !important;
+    border-left: none !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  
+  .auth-info-panel {
+    padding: 30px 20px !important;
+    text-align: center;
+    align-items: center;
+  }
+  
+  .auth-info-panel h1 {
+    font-size: 2rem !important;
+  }
+
+  /* Grids and Columns Stacking */
+  .grid-two-cols,
+  .grid-register,
+  .grid-profile {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+  
+  /* Flex Rows Stacking */
+  .flex-row-between {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+  
+  /* Padding Adjustments */
+  .glass-panel {
+    padding: 20px !important;
+  }
+  
+  /* Header Font Adjustments */
+  h1 { font-size: 2rem !important; }
+  h2 { font-size: 1.5rem !important; }
+  h3 { font-size: 1.25rem !important; }
+  
+  /* Viewfinder Overlay scanning box */
+  .viewfinder-box {
+    width: min(240px, 70%) !important;
+    height: min(240px, 70%) !important;
+    border-radius: 30px !important;
+  }
+  
+  /* Student Profile Page Header */
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+    padding: 24px !important;
+    gap: 16px !important;
+    margin-bottom: 24px !important;
+  }
+  
+  .profile-header h1 {
+    font-size: 2.2rem !important;
+  }
+}
